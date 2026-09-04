@@ -1,0 +1,628 @@
+/**
+ * PM-AJAY NSQF Livelihood Platform - Bauhaus Design System
+ * Strict Bauhaus Aesthetic: Form follows function, flat 2D geometric planes,
+ * heavy structural black grids, cream background, zero shadows, zero gradients.
+ */
+
+:root {
+  /* Core Bauhaus Color Palette */
+  --bg-cream: #F5F2EB;
+  --bg-cream-card: #FFFFFF;
+  --stark-black: #111111;
+  --navy-blue: #06038D;
+  --deep-saffron: #FF671F;
+  --bright-saffron: #FF9933;
+  --crimson-red: #D32F2F;
+  --ochre-yellow: #FFD700;
+  --forest-green: #007A3D;
+  --slate-gray: #4A4A4A;
+  --light-gray: #E0DCD3;
+
+  /* Strict Structural Typography */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Geometric Grid Tokens */
+  --border-thick: 4px solid var(--stark-black);
+  --border-med: 2.5px solid var(--stark-black);
+  --border-thin: 1.5px solid var(--stark-black);
+  --border-blue: 3px solid var(--navy-blue);
+  --border-saffron: 3px solid var(--deep-saffron);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-cream);
+  color: var(--stark-black);
+  font-family: var(--font-main);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Zero shadows and zero gradients across all elements */
+*, *::before, *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--stark-black);
+  line-height: 1.05;
+}
+
+h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
+h4 { font-size: 1.15rem; }
+
+p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.mono-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Layout Framework */
+.bauhaus-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Header & Structural Grid Navigation */
+.bauhaus-header {
+  background-color: var(--bg-cream);
+  border-bottom: var(--border-thick);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: stretch;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--stark-black);
+  color: #FFF;
+  text-decoration: none;
+  border-right: var(--border-thick);
+}
+
+.brand-glyph {
+  width: 32px;
+  height: 32px;
+  background-color: var(--deep-saffron);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--navy-blue);
+  border: 2px solid #FFF;
+}
+
+.brand-title {
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: #FFF;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-subtitle {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--bright-saffron);
+  font-family: var(--font-mono);
+}
+
+.nav-links {
+  display: flex;
+  align-items: stretch;
+  list-style: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-right: var(--border-med);
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--stark-black);
+  transition: background-color 0.1s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+  background-color: var(--navy-blue);
+  color: #FFFFFF;
+}
+
+.nav-item.accent-orange:hover, .nav-item.accent-orange.active {
+  background-color: var(--deep-saffron);
+  color: var(--stark-black);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.lang-selector-select {
+  background: #FFF;
+  border: var(--border-med);
+  padding: 0.5rem 0.8rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  outline: none;
+}
+
+/* Bauhaus Grid Blocks & Panels */
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.grid-7col {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+  .grid-2col, .grid-3col, .grid-4col {
+    grid-template-columns: 1fr;
+  }
+  .grid-7col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .header-inner {
+    grid-template-columns: 1fr;
+  }
+  .brand-mark {
+    border-right: none;
+    border-bottom: var(--border-thick);
+  }
+  .nav-links {
+    overflow-x: auto;
+  }
+}
+
+.bauhaus-card {
+  background-color: var(--bg-cream-card);
+  border: var(--border-thick);
+  position: relative;
+}
+
+.card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: var(--border-thick);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FAFAFA;
+}
+
+.card-header.navy {
+  background-color: var(--navy-blue);
+  color: #FFF;
+}
+.card-header.navy h3, .card-header.navy .mono-meta {
+  color: #FFF;
+}
+
+.card-header.saffron {
+  background-color: var(--deep-saffron);
+  color: var(--stark-black);
+}
+
+.card-header.black {
+  background-color: var(--stark-black);
+  color: #FFF;
+}
+.card-header.black h3, .card-header.black .mono-meta {
+  color: #FFF;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Tactile Bauhaus Buttons */
+.bauhaus-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  font-weight: 900;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  border: var(--border-thick);
+  background-color: #FFF;
+  color: var(--stark-black);
+  transition: transform 0.05s ease, background-color 0.1s ease;
+  user-select: none;
+}
+
+.bauhaus-btn:active {
+  transform: translate(3px, 3px);
+}
+
+.bauhaus-btn.primary-navy {
+  background-color: var(--navy-blue);
+  color: #FFF;
+}
+.bauhaus-btn.primary-navy:hover {
+  background-color: #040263;
+}
+
+.bauhaus-btn.primary-saffron {
+  background-color: var(--deep-saffron);
+  color: var(--stark-black);
+}
+.bauhaus-btn.primary-saffron:hover {
+  background-color: var(--bright-saffron);
+}
+
+.bauhaus-btn.stark-black {
+  background-color: var(--stark-black);
+  color: #FFF;
+}
+.bauhaus-btn.stark-black:hover {
+  background-color: #262626;
+}
+
+.bauhaus-btn.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border: var(--border-med);
+}
+
+.bauhaus-btn.btn-lg {
+  padding: 1.1rem 2.2rem;
+  font-size: 1.15rem;
+}
+
+/* Badges & Tags */
+.bauhaus-tag {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border: var(--border-thin);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background-color: #FFF;
+  color: var(--stark-black);
+}
+
+.bauhaus-tag.tag-navy {
+  background-color: var(--navy-blue);
+  color: #FFF;
+  border-color: var(--navy-blue);
+}
+
+.bauhaus-tag.tag-saffron {
+  background-color: var(--deep-saffron);
+  color: var(--stark-black);
+}
+
+.bauhaus-tag.tag-green {
+  background-color: var(--forest-green);
+  color: #FFF;
+  border-color: var(--forest-green);
+}
+
+.bauhaus-tag.tag-yellow {
+  background-color: var(--ochre-yellow);
+  color: var(--stark-black);
+}
+
+/* Hero Section Styles */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  border: var(--border-thick);
+  margin-top: 2rem;
+  background-color: #FFF;
+}
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero-main {
+  padding: 3rem 2.5rem;
+  border-right: var(--border-thick);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-sidebar {
+  background-color: var(--bg-cream);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-block {
+  padding: 1.75rem;
+  border-bottom: var(--border-thick);
+}
+
+.hero-stat-block:last-child {
+  border-bottom: none;
+}
+
+.stat-number {
+  font-size: 3.2rem;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+/* 7-Dimension Geometric Progress Matrix */
+.dim-tracker {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: var(--border-thick);
+  background-color: #FFF;
+  margin: 1.5rem 0;
+}
+
+.dim-step {
+  padding: 1rem 0.75rem;
+  border-right: var(--border-thick);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.dim-step:last-child {
+  border-right: none;
+}
+
+.dim-step.completed {
+  background-color: var(--ochre-yellow);
+}
+
+.dim-step.active {
+  background-color: var(--deep-saffron);
+  color: var(--stark-black);
+}
+
+.dim-step.pending {
+  background-color: #FFF;
+  opacity: 0.6;
+}
+
+.dim-number {
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dim-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+/* Audio Visualizer Canvas */
+.waveform-container {
+  background-color: var(--stark-black);
+  border: var(--border-thick);
+  padding: 1rem;
+  position: relative;
+}
+
+#waveformCanvas {
+  width: 100%;
+  height: 110px;
+  display: block;
+  background-color: var(--stark-black);
+}
+
+/* Conversational Chat Interface */
+.interview-chat-box {
+  border: var(--border-thick);
+  background-color: #FFF;
+  height: 480px;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  border: var(--border-thick);
+  padding: 1rem 1.25rem;
+  position: relative;
+}
+
+.chat-bubble.agent {
+  align-self: flex-start;
+  background-color: var(--bg-cream);
+  border-left: 8px solid var(--navy-blue);
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background-color: var(--ochre-yellow);
+  border-right: 8px solid var(--stark-black);
+}
+
+.bubble-sender {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bubble-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Live Recording Controls Bar */
+.recorder-control-bar {
+  border: var(--border-thick);
+  border-top: none;
+  background-color: var(--bg-cream);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mic-active-pulse {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--crimson-red);
+  margin-right: 0.5rem;
+}
+
+/* NSQF Recommendation Cards */
+.trade-card {
+  border: var(--border-thick);
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.trade-match-badge {
+  background-color: var(--navy-blue);
+  color: #FFF;
+  padding: 0.5rem 1rem;
+  font-weight: 900;
+  font-size: 1.4rem;
+  border-left: var(--border-thick);
+}
+
+.progress-bar-bauhaus {
+  height: 16px;
+  border: var(--border-med);
+  background-color: #FFF;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--deep-saffron);
+}
+
+.progress-fill.navy {
+  background-color: var(--navy-blue);
+}
+
+/* Footer Bauhaus Layout */
+.bauhaus-footer {
+  margin-top: 4rem;
+  border-top: var(--border-thick);
+  background-color: var(--stark-black);
+  color: #FFF;
+  padding: 3rem 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-links a {
+  color: var(--light-gray);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+  color: var(--bright-saffron);
+}
+
+/* Screen Reader Highlighting Class for widget.js */
+.bauhaus-screen-reader-highlight {
+  outline: 4px solid var(--deep-saffron) !important;
+  background-color: #FFF8E7 !important;
+  transition: outline 0.15s ease, background-color 0.15s ease;
+}

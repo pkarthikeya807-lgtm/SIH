@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PM-AJAY NSQF Livelihood & Voice AI Platform{% endblock %}</title>
+  <meta name="description" content="PM-AJAY 7-Dimension Beneficiary Livelihood Mapping & NSQF Skill Recommendation Platform with Voice-to-Voice AI and Bauhaus Design System.">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Bauhaus Design System CSS -->
+  <link rel="stylesheet" href="{% static 'css/bauhaus.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Master Bauhaus Header -->
+  <header class="bauhaus-header">
+    <div class="header-inner">
+      <a href="{% url 'livelihood:index' %}" class="brand-mark">
+        <div class="brand-glyph">▲</div>
+        <div class="brand-title">
+          <span>PM-AJAY LIVELIHOOD</span>
+          <span class="brand-subtitle">NSQF SKILL & VOICE AI PLATFORM</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="{% url 'livelihood:index' %}" class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+          01. PORTAL & TRADES
+        </a>
+        <a href="{% url 'livelihood:interview' %}" class="nav-item accent-orange {% if request.resolver_match.url_name == 'interview' %}active{% endif %}">
+          02. VOICE INTERVIEWER 🎙
+        </a>
+        <a href="{% url 'livelihood:dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+          03. 7D DASHBOARD & CENTERS
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <select class="lang-selector-select" id="globalLangSelector" onchange="switchAppLanguage(this.value)">
+          <option value="hi" selected>हिन्दी (HI)</option>
+          <option value="ta">தமிழ் (TA)</option>
+          <option value="te">తెలుగు (TE)</option>
+          <option value="mr">मराठी (MR)</option>
+          <option value="or">ଓଡ଼ିଆ (OR)</option>
+          <option value="bn">বাংলা (BN)</option>
+          <option value="en">English (EN)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Body -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Bauhaus Structural Footer -->
+  <footer class="bauhaus-footer">
+    <div class="bauhaus-container">
+      <div class="footer-grid">
+        <div>
+          <h3 style="color:#FFF;margin-bottom:0.75rem;">PM-AJAY LIVELIHOOD PLATFORM</h3>
+          <p style="color:var(--light-gray);font-size:0.9rem;max-width:520px;line-height:1.6;">
+            Pradhan Mantri Anusuchit Jaati Abhyuday Yojana (PM-AJAY) National Skill Qualification Framework (NSQF)
+            Empathetic Conversational Voice AI & Beneficiary Mapping System. Form follows function.
+          </p>
+          <div style="margin-top:1.25rem;display:flex;gap:0.75rem;">
+            <span class="bauhaus-tag tag-saffron">NSQF ALIGNED</span>
+            <span class="bauhaus-tag tag-navy">VOICE-TO-VOICE AI</span>
+            <span class="bauhaus-tag tag-yellow">7-DIMENSION MATRIX</span>
+          </div>
+        </div>
+        <div>
+          <h4 style="color:#FFF;margin-bottom:1rem;" class="mono-meta">Core Modules</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'livelihood:interview' %}">→ Voice-to-Voice Interviewer</a></li>
+            <li><a href="{% url 'livelihood:dashboard' %}">→ NSQF Match Engine</a></li>
+            <li><a href="{% url 'livelihood:index' %}#trades">→ Qualification Pack Directory</a></li>
+            <li><a href="{% url 'livelihood:index' %}#framework">→ 7-Dimensional Schema</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#FFF;margin-bottom:1rem;" class="mono-meta">System Telemetry</h4>
+          <p style="color:var(--light-gray);font-size:0.85rem;font-family:var(--font-mono);line-height:1.8;">
+            STT ENGINE: WHISPER / BHASHINI<br>
+            TTS SYNTH: INDIC-TTS + BROWSER<br>
+            FRAMEWORK: DJANGO REST + SQLITE<br>
+            DESIGN SYSTEM: BAUHAUS 2.0
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Pop-Out Screen Reader Widget -->
+  <script src="{% static 'js/widget.js' %}"></script>
+
+  <script>
+    function switchAppLanguage(lang) {
+      localStorage.setItem('pmajay_selected_lang', lang);
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', lang);
+      window.location.href = url.toString();
+    }
+
+    // Preserve language selection
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang') || localStorage.getItem('pmajay_selected_lang');
+      if (langParam) {
+        const sel = document.getElementById('globalLangSelector');
+        if (sel) sel.value = langParam;
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

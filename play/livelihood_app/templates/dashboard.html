@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NSQF Recommendations & Skill Passport | PM-AJAY{% endblock %}
+
+{% block content %}
+<div class="bauhaus-container" style="padding-top:1.5rem;">
+
+  <!-- Page Header & Actions -->
+  <div
+    style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;border-bottom:var(--border-thick);padding-bottom:1rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+        <span class="bauhaus-tag tag-navy">NSQF SKILL RECOMMENDATION ENGINE</span>
+        <span class="bauhaus-tag tag-saffron">7-DIMENSIONAL VECTOR MATCH</span>
+      </div>
+      <h2>BENEFICIARY LIVELIHOOD MAPPING & PASSPORT</h2>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;">
+      <button class="bauhaus-btn btn-sm" onclick="window.print()">
+        🖨 Print Skill Passport
+      </button>
+      <a href="{% url 'livelihood:interview' %}" class="bauhaus-btn btn-sm primary-saffron">
+        🎙 Retake Voice Interview
+      </a>
+    </div>
+  </div>
+
+  <!-- Beneficiary 7-Dimension Passport Card -->
+  <div class="bauhaus-card" style="margin-bottom:2.5rem;">
+    <div class="card-header black">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span class="brand-glyph" style="width:28px;height:28px;font-size:1rem;">★</span>
+        <div>
+          <h3 style="color:#FFF;font-size:1.25rem;">{{ beneficiary.name }}</h3>
+          <span class="mono-meta" style="color:var(--bright-saffron);">
+            ID: {{ beneficiary.id|stringformat:".8s" }} | {{ beneficiary.district }}, {{ beneficiary.state }} |
+            PREFERRED: {{ beneficiary.get_preferred_language_display }}
+          </span>
+        </div>
+      </div>
+      <span class="bauhaus-tag tag-green">SURVEY VERIFIED</span>
+    </div>
+
+    <div class="card-body" style="background-color:#FAFAFA;">
+      <div class="grid-7col">
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">01. EDUCATION</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{ beneficiary.education_level }}</div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">02. HERITAGE CRAFT</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{ beneficiary.family_occupation }}</div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">03. CURRENT WORK</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{ beneficiary.current_livelihood }}</div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">04. PRIMARY SKILL</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">
+            {% if beneficiary.primary_skills %}{{ beneficiary.primary_skills.0 }}{% else %}Electrical & Sewing{% endif
+            %}
+          </div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">05. MOBILITY</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{ beneficiary.mobility_constraint }}</div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">06. MODE PREF</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{
+            beneficiary.employment_preference|truncatewords:2 }}</div>
+        </div>
+        <div style="border:var(--border-thin);padding:0.75rem;background:#FFF;">
+          <span class="mono-meta" style="font-size:0.68rem;color:var(--slate-gray);">07. DISTRICT ECON</span>
+          <div style="font-weight:900;font-size:0.9rem;margin-top:0.2rem;">{{
+            beneficiary.district_economy|truncatewords:2 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Primary Top Recommended NSQF Trade -->
+  {% if top_recommendation %}
+  <section style="margin-bottom:3.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <span class="mono-meta" style="color:var(--deep-saffron);">TOP RECOMMENDED QUALIFICATION PACK</span>
+      <span class="bauhaus-tag tag-navy">MATCH ACCURACY: {{ top_recommendation.match_score }}%</span>
+    </div>
+
+    <div class="bauhaus-card" style="border:var(--border-thick);">
+      <div class="card-header saffron" style="padding:1.5rem;">
+        <div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <span class="mono-meta" style="font-size:0.85rem;">{{ top_recommendation.qp_code }}</span>
+            <span class="bauhaus-tag tag-navy">NSQF LEVEL {{ top_recommendation.nsqf_level }}</span>
+            {% if top_recommendation.rpl_eligible %}
+            <span class="bauhaus-tag tag-green">★ RPL HERITAGE BONUS APPLIED</span>
+            {% endif %}
+          </div>
+          <h2 style="margin-top:0.5rem;font-size:clamp(1.8rem, 3vw, 2.5rem);">
+            {{ top_recommendation.trade_name }}
+          </h2>
+          <p style="font-weight:700;margin-top:0.25rem;">Sector: {{ top_recommendation.sector }}</p>
+        </div>
+
+        <div style="text-align:right;">
+          <div style="font-size:3.5rem;font-weight:900;line-height:0.9;color:var(--stark-black);">
+            {{ top_recommendation.match_score }}%
+          </div>
+          <span class="mono-meta">COMPATIBILITY SCORE</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="grid-2col" style="align-items:start;">
+
+          <!-- Dimension Breakdown Scores -->
+          <div>
+            <h4 style="margin-bottom:1rem;">7-DIMENSION COMPATIBILITY RADAR</h4>
+
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>01. EDUCATION PREREQUISITE FIT</span>
+                  <span>{{ top_recommendation.dimension_breakdown.education_fit }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.education_fit }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>02. TRADITIONAL OCCUPATION SYNERGY</span>
+                  <span>{{ top_recommendation.dimension_breakdown.traditional_synergy }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.traditional_synergy }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>03. CURRENT LIVELIHOOD CONTINUITY</span>
+                  <span>{{ top_recommendation.dimension_breakdown.livelihood_continuity }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.livelihood_continuity }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>04. SKILLS & APTITUDE ALIGNMENT</span>
+                  <span>{{ top_recommendation.dimension_breakdown.skill_aptitude }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.skill_aptitude }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>05. GEOGRAPHIC MOBILITY FIT</span>
+                  <span>{{ top_recommendation.dimension_breakdown.mobility_fit }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.mobility_fit }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>06. EMPLOYMENT ORIENTATION ({{ top_recommendation.wage_vs_self }})</span>
+                  <span>{{ top_recommendation.dimension_breakdown.employment_mode_fit }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.employment_mode_fit }}%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;margin-bottom:0.2rem;">
+                  <span>07. LOCAL DISTRICT DEMAND (ODOP CLUSTER)</span>
+                  <span>{{ top_recommendation.dimension_breakdown.district_demand_fit }}%</span>
+                </div>
+                <div class="progress-bar-bauhaus">
+                  <div class="progress-fill"
+                    style="--progress-pct: {{ top_recommendation.dimension_breakdown.district_demand_fit }}%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Economic Upside & Skill Gap Bridge -->
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <!-- Projected Income Upside Card -->
+            <div style="border:var(--border-med);padding:1.25rem;background:#FFF;">
+              <span class="mono-meta" style="color:var(--forest-green);">PROJECTED LIVELIHOOD UPSIDE</span>
+              <div style="display:flex;align-items:baseline;gap:0.75rem;margin-top:0.25rem;">
+                <div style="font-size:2.4rem;font-weight:900;color:var(--stark-black);">
+                  ₹{{ top_recommendation.avg_monthly_income_inr }}<span
+                    style="font-size:1rem;font-weight:700;">/mo</span>
+                </div>
+                <span class="bauhaus-tag tag-green">+140% vs Baseline</span>
+              </div>
+              <p style="font-size:0.85rem;color:var(--slate-gray);margin-top:0.4rem;">
+                Target path: {{ top_recommendation.wage_vs_self }} with PM-AJAY Special Central Assistance toolkits &
+                micro-credit.
+              </p>
+            </div>
+
+            <!-- Skill Gap Analysis -->
+            <div style="border:var(--border-med);padding:1.25rem;background:#FFF;">
+              <span class="mono-meta" style="color:var(--crimson-red);">SKILL GAP ANALYSIS & BRIDGE MODULES</span>
+              <ul style="margin-top:0.6rem;padding-left:1.2rem;font-size:0.9rem;line-height:1.6;">
+                {% for gap in top_recommendation.skill_gaps %}
+                <li><strong>{{ gap }}</strong></li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Core Syllabus Modules -->
+            <div style="border:var(--border-med);padding:1.25rem;background:#FFF;">
+              <span class="mono-meta">CORE NSQF SYLLABUS MODULES</span>
+              <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem;">
+                {% for mod in top_recommendation.key_modules %}
+                <span class="bauhaus-tag">{{ mod }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Training Centers Affiliated with this Trade -->
+        <div style="margin-top:2rem;border-top:var(--border-thick);padding-top:1.5rem;">
+          <h4 style="margin-bottom:1rem;">NEARBY PM-AJAY SKILL TRAINING CENTERS</h4>
+
+          <div class="grid-3col">
+            {% for center in top_recommendation.nearby_centers %}
+            <div
+              style="border:var(--border-med);padding:1rem;background:#FFF;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <span class="mono-meta" style="font-size:0.7rem;color:var(--navy-blue);">{{ center.id }}</span>
+                <h4 style="font-size:1rem;margin-top:0.2rem;">{{ center.name }}</h4>
+                <p style="font-size:0.85rem;color:var(--slate-gray);margin-top:0.4rem;">{{ center.address }}</p>
+              </div>
+
+              <div
+                style="margin-top:1rem;border-top:var(--border-thin);padding-top:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+                <span class="bauhaus-tag {% if center.hostel %}tag-green{% else %}tag-yellow{% endif %}">
+                  {% if center.hostel %}Hostel Available{% else %}Day Scholar{% endif %}
+                </span>
+                <span class="mono-meta" style="font-size:0.75rem;">{{ center.contact }}</span>
+              </div>
+            </div>
+            {% empty %}
+            <div style="grid-column:1/-1;padding:1rem;background:#FFF;border:var(--border-med);">
+              <span>Direct PM-AJAY district center enrollment available through District Welfare Officer (DWO).</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Alternative Matched Qualification Packs -->
+  {% if other_recommendations %}
+  <section style="margin-bottom:4rem;">
+    <div style="margin-bottom:1.25rem;border-bottom:var(--border-thick);padding-bottom:0.75rem;">
+      <span class="mono-meta" style="color:var(--navy-blue);">SECONDARY MATCHES</span>
+      <h3 style="margin-top:0.25rem;">ALTERNATIVE QUALIFICATION PACK OPTIONS</h3>
+    </div>
+
+    <div class="grid-3col">
+      {% for rec in other_recommendations %}
+      <div class="trade-card">
+        <div>
+          <div class="card-header black">
+            <div>
+              <span class="mono-meta" style="color:var(--bright-saffron);">{{ rec.qp_code }}</span>
+              <h3 style="font-size:1.1rem;color:#FFF;margin-top:0.2rem;">{{ rec.trade_name }}</h3>
+            </div>
+            <div style="text-align:right;">
+              <span class="trade-match-badge"
+                style="background:var(--deep-saffron);color:#111;font-size:1.1rem;padding:0.25rem 0.6rem;">
+                {{ rec.match_score }}%
+              </span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div style="display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+              <span class="bauhaus-tag">{{ rec.sector }}</span>
+              <span class="bauhaus-tag tag-yellow">Level {{ rec.nsqf_level }}</span>
+              <span class="bauhaus-tag tag-green">₹{{ rec.avg_monthly_income_inr }}/mo</span>
+            </div>
+
+            <div style="font-size:0.85rem;margin-bottom:0.75rem;">
+              <strong>Career Path:</strong> {{ rec.wage_vs_self }}
+            </div>
+
+            <div style="border-top:var(--border-thin);padding-top:0.5rem;">
+              <span class="mono-meta" style="font-size:0.68rem;">KEY HIGHLIGHTS:</span>
+              <ul style="padding-left:1.1rem;font-size:0.82rem;margin-top:0.25rem;">
+                {% for m in rec.key_modules|slice:":2" %}
+                <li>{{ m }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="padding:0.75rem 1.25rem;background:#FAFAFA;border-top:var(--border-thick);display:flex;justify-content:space-between;align-items:center;">
+          <span class="mono-meta" style="font-size:0.72rem;">{{ rec.duration_hours }} HRS</span>
+          <a href="{% url 'livelihood:interview' %}?qp={{ rec.qp_code }}" class="bauhaus-btn btn-sm primary-navy">
+            Select Trade
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- State & District PM-AJAY Training Centers Locator -->
+  <section style="margin-bottom:4rem;">
+    <div
+      style="margin-bottom:1.25rem;border-bottom:var(--border-thick);padding-bottom:0.75rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <span class="mono-meta" style="color:var(--deep-saffron);">TRAINING INFRASTRUCTURE</span>
+        <h3 style="margin-top:0.25rem;">ALL AFFILIATED PM-AJAY SKILL CENTERS</h3>
+      </div>
+      <div>
+        <input type="text" id="centerSearchInput" onkeyup="filterCenters()" placeholder="Search state or district..."
+          style="border:var(--border-med);padding:0.5rem 0.8rem;font-weight:700;font-size:0.85rem;outline:none;">
+      </div>
+    </div>
+
+    <div class="grid-3col" id="allCentersGrid">
+      {% for center in centers %}
+      <div class="bauhaus-card center-item" data-location="{{ center.state }} {{ center.district }} {{ center.name }}">
+        <div class="card-header navy">
+          <div>
+            <span class="mono-meta" style="color:var(--bright-saffron);">{{ center.center_id }}</span>
+            <h4 style="color:#FFF;margin-top:0.2rem;font-size:0.95rem;">{{ center.name }}</h4>
+          </div>
+        </div>
+        <div class="card-body"
+          style="display:flex;flex-direction:column;justify-content:space-between;height:calc(100% - 60px);">
+          <div>
+            <div style="display:flex;gap:0.4rem;margin-bottom:0.6rem;flex-wrap:wrap;">
+              <span class="bauhaus-tag tag-saffron">{{ center.district }}</span>
+              <span class="bauhaus-tag">{{ center.state }}</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--slate-gray);margin-bottom:0.75rem;">
+              {{ center.address }}
+            </p>
+            <div style="font-size:0.8rem;">
+              <strong>Trades Offered:</strong>
+              <div style="display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.25rem;">
+                {% for tr in center.trades_offered.all %}
+                <span class="bauhaus-tag" style="font-size:0.65rem;">{{ tr.qp_code }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="margin-top:1rem;border-top:var(--border-thin);padding-top:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+            <span class="bauhaus-tag {% if center.hostel_available %}tag-green{% else %}tag-yellow{% endif %}">
+              {% if center.hostel_available %}Hostel Facility{% else %}Day Scholar{% endif %}
+            </span>
+            <span class="mono-meta" style="font-size:0.75rem;">{{ center.contact_phone }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function filterCenters() {
+    const input = document.getElementById('centerSearchInput').value.toLowerCase();
+    const items = document.querySelectorAll('#allCentersGrid .center-item');
+    items.forEach(item => {
+      const text = item.getAttribute('data-location').toLowerCase();
+      if (text.includes(input)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+{% endblock %}

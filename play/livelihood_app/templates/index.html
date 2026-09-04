@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PM-AJAY Livelihood Portal | NSQF & Voice AI Platform{% endblock %}
+
+{% block content %}
+<div class="bauhaus-container">
+
+  <!-- Hero Section -->
+  <section class="hero-grid">
+    <div class="hero-main">
+      <div>
+        <div style="display:flex;gap:0.5rem;margin-bottom:1rem;">
+          <span class="bauhaus-tag tag-navy">GOVERNMENT OF INDIA INITIATIVE</span>
+          <span class="bauhaus-tag tag-saffron">PM-AJAY SCHEME</span>
+        </div>
+        <h1 style="margin-bottom:1.5rem;">
+          VOCATIONAL SKILLING & LIVELIHOOD MAPPING
+        </h1>
+        <p style="font-size:1.2rem;font-weight:600;max-width:680px;line-height:1.5;margin-bottom:2rem;color:var(--slate-gray);">
+          Empathetic multi-lingual Voice-to-Voice AI assessing beneficiaries across <strong style="color:var(--stark-black);">7 livelihood dimensions</strong> to recommend tailored National Skill Qualification Framework (NSQF) Qualification Packs and nearby PM-AJAY training centers.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="{% url 'livelihood:interview' %}" class="bauhaus-btn primary-saffron btn-lg">
+          🎙 Start Voice Interview
+        </a>
+        <a href="{% url 'livelihood:dashboard' %}" class="bauhaus-btn stark-black btn-lg">
+          📊 Explore 7D Dashboard
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-sidebar">
+      <div class="hero-stat-block" style="background-color:var(--navy-blue);color:#FFF;">
+        <span class="mono-meta" style="color:var(--bright-saffron);">01. NSQF QUALIFICATION PACKS</span>
+        <div class="stat-number" style="color:#FFF;">{{ total_trades|default:"10+" }}</div>
+        <p style="font-size:0.85rem;margin-top:0.4rem;color:#E0E0E0;">Curated across Green Jobs, Apparel, Electronics, Automotive & Food Processing</p>
+      </div>
+
+      <div class="hero-stat-block" style="background-color:var(--ochre-yellow);">
+        <span class="mono-meta">02. PM-AJAY SKILL HUBS</span>
+        <div class="stat-number">{{ total_centers|default:"7" }}</div>
+        <p style="font-size:0.85rem;margin-top:0.4rem;font-weight:700;">Active training centers in UP, Delhi, Tamil Nadu, Telangana, Odisha & WB</p>
+      </div>
+
+      <div class="hero-stat-block" style="background-color:#FFF;">
+        <span class="mono-meta">03. REGIONAL INDIC LANGUAGES</span>
+        <div class="stat-number" style="color:var(--deep-saffron);">07</div>
+        <p style="font-size:0.85rem;margin-top:0.4rem;">Hindi, Tamil, Telugu, Marathi, Odia, Bengali, English with Speech-to-Speech</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7-Dimension Beneficiary Mapping Framework Section -->
+  <section id="framework" style="margin-top:3.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;border-bottom:var(--border-thick);padding-bottom:1rem;">
+      <div>
+        <span class="mono-meta" style="color:var(--navy-blue);">SYSTEM ARCHITECTURE</span>
+        <h2 style="margin-top:0.25rem;">THE 7-DIMENSIONAL BENEFICIARY MATRIX</h2>
+      </div>
+      <a href="{% url 'livelihood:interview' %}" class="bauhaus-btn btn-sm primary-navy">
+        Take 7D Voice Assessment →
+      </a>
+    </div>
+
+    <div class="grid-7col">
+      <div class="bauhaus-card">
+        <div class="card-header saffron">
+          <span class="dim-number">01</span>
+          <span class="mono-meta">EDU</span>
+        </div>
+        <div class="card-body">
+          <h4>Education Background</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">5th, 8th, 10th, 12th, ITI, or Non-formal baseline verification.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header black">
+          <span class="dim-number" style="color:#FFF;">02</span>
+          <span class="mono-meta">HERITAGE</span>
+        </div>
+        <div class="card-body">
+          <h4>Family Occupation</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">Traditional artisan craft, weaving, carpentry, blacksmithing or farming.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header navy">
+          <span class="dim-number" style="color:#FFF;">03</span>
+          <span class="mono-meta">WORK</span>
+        </div>
+        <div class="card-body">
+          <h4>Current Livelihood</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">Daily wage helper, small vendor, seasonal farm labor, or job seeker.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header saffron">
+          <span class="dim-number">04</span>
+          <span class="mono-meta">SKILL</span>
+        </div>
+        <div class="card-body">
+          <h4>Skills & Interests</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">Solar, electrical wiring, tailoring, EV mechanics, digital tools.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header black">
+          <span class="dim-number" style="color:#FFF;">05</span>
+          <span class="mono-meta">GEO</span>
+        </div>
+        <div class="card-body">
+          <h4>Mobility Bounds</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">Home-based village work, district center, or state-wide relocation.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header navy">
+          <span class="dim-number" style="color:#FFF;">06</span>
+          <span class="mono-meta">MODE</span>
+        </div>
+        <div class="card-body">
+          <h4>Self vs Wage</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">Micro-enterprise / SHG business vs regular monthly salary employment.</p>
+        </div>
+      </div>
+
+      <div class="bauhaus-card">
+        <div class="card-header saffron">
+          <span class="dim-number">07</span>
+          <span class="mono-meta">DEMAND</span>
+        </div>
+        <div class="card-body">
+          <h4>District Economy</h4>
+          <p style="font-size:0.82rem;margin-top:0.5rem;color:var(--slate-gray);">ODOP clusters, rural agri-tech, industrial corridors, or service hubs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NSQF Trade Catalog & Explorer -->
+  <section id="trades" style="margin-top:4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;border-bottom:var(--border-thick);padding-bottom:1rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <span class="mono-meta" style="color:var(--deep-saffron);">OFFICIAL QUALIFICATION PACKS</span>
+        <h2 style="margin-top:0.25rem;">NSQF TRADE CATALOG DIRECTORY</h2>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="sectorFilters">
+        <button class="bauhaus-btn btn-sm primary-navy active" onclick="filterTrades('ALL', this)">ALL SECTORS</button>
+        <button class="bauhaus-btn btn-sm" onclick="filterTrades('Green Jobs', this)">GREEN & SOLAR</button>
+        <button class="bauhaus-btn btn-sm" onclick="filterTrades('Apparel', this)">APPAREL & WEAVING</button>
+        <button class="bauhaus-btn btn-sm" onclick="filterTrades('Automotive', this)">AUTOMOTIVE / EV</button>
+        <button class="bauhaus-btn btn-sm" onclick="filterTrades('Electronics', this)">ELECTRONICS</button>
+        <button class="bauhaus-btn btn-sm" onclick="filterTrades('Agriculture', this)">AGRITECH</button>
+      </div>
+    </div>
+
+    <div class="grid-3col" id="tradesGrid">
+      {% for trade in trades %}
+      <div class="trade-card" data-sector="{{ trade.sector }}">
+        <div>
+          <div class="card-header {% cycle 'navy' 'black' 'saffron' %}">
+            <div>
+              <span class="mono-meta">{{ trade.qp_code }}</span>
+              <h3 style="font-size:1.15rem;margin-top:0.2rem;">{{ trade.name }}</h3>
+            </div>
+            <div style="text-align:right;">
+              <span class="bauhaus-tag tag-yellow">LEVEL {{ trade.nsqf_level }}</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+              <span class="bauhaus-tag">{{ trade.sector }}</span>
+              <span class="bauhaus-tag">Min: {{ trade.min_education }}</span>
+              <span class="bauhaus-tag tag-green">₹{{ trade.avg_monthly_income_inr }}/mo</span>
+            </div>
+
+            <p style="font-size:0.9rem;color:var(--slate-gray);line-height:1.45;margin-bottom:1.25rem;">
+              {{ trade.description|truncatewords:28 }}
+            </p>
+
+            <div style="border-top:var(--border-thin);padding-top:0.75rem;">
+              <span class="mono-meta" style="font-size:0.7rem;">KEY SYLLABUS HIGHLIGHTS:</span>
+              <ul style="margin-top:0.4rem;padding-left:1.2rem;font-size:0.85rem;color:var(--stark-black);">
+                {% for module in trade.key_modules|slice:":3" %}
+                <li>{{ module }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:1rem 1.5rem;background-color:#FAFAFA;border-top:var(--border-thick);display:flex;justify-content:space-between;align-items:center;">
+          <span class="mono-meta" style="font-size:0.72rem;">DURATION: {{ trade.duration_hours }} HOURS</span>
+          <a href="{% url 'livelihood:interview' %}?target_qp={{ trade.qp_code }}" class="bauhaus-btn btn-sm primary-saffron">
+            Check Fit →
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Interactive Call to Action Banner -->
+  <section style="margin-top:4.5rem;border:var(--border-thick);background-color:var(--navy-blue);color:#FFF;padding:3rem 2rem;">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem;align-items:center;">
+      <div>
+        <span class="mono-meta" style="color:var(--bright-saffron);">ACCESSIBILITY & CONVERSATIONAL EMPOWERMENT</span>
+        <h2 style="color:#FFF;margin-top:0.5rem;margin-bottom:1rem;">
+          POP-OUT REGIONAL SCREEN READER WIDGET
+        </h2>
+        <p style="font-size:1.05rem;line-height:1.6;color:#EAEAEA;max-width:700px;">
+          The platform includes an embeddable <code style="background:#000;padding:2px 6px;border:1px solid #FFF;font-family:monospace;">widget.js</code> screen reader. Highlight any text or let the reader guide you through the content with live high-contrast visual focus and Indic TTS voice narration.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start;">
+        <button class="bauhaus-btn primary-saffron btn-lg" onclick="document.getElementById('pmajayFab').click()">
+          🔊 Test Reader Widget
+        </button>
+        <span class="mono-meta" style="color:#FFF;font-size:0.75rem;">ZERO EXTERNAL DEPENDENCIES</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function filterTrades(sector, btn) {
+    document.querySelectorAll('#sectorFilters button').forEach(b => {
+      b.classList.remove('primary-navy', 'active');
+    });
+    btn.classList.add('primary-navy', 'active');
+
+    const cards = document.querySelectorAll('#tradesGrid .trade-card');
+    cards.forEach(card => {
+      const cardSector = card.getAttribute('data-sector') || '';
+      if (sector === 'ALL' || cardSector.toLowerCase().includes(sector.toLowerCase())) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Voice Interviewer | PM-AJAY 7D Beneficiary Mapping{% endblock %}
+
+{% block content %}
+<div class="bauhaus-container" style="padding-top:1.5rem;">
+
+  <!-- Header Banner -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;border-bottom:var(--border-thick);padding-bottom:1rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+        <span class="bauhaus-tag tag-navy">REAL-TIME VOICE-TO-VOICE AGENT</span>
+        <span class="bauhaus-tag tag-saffron" id="sessionTag">SESSION: {{ session_id }}</span>
+      </div>
+      <h2>7-DIMENSION BENEFICIARY INTERVIEW STUDIO</h2>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="bauhaus-btn btn-sm" id="btnPlayAgentPrompt" onclick="replayCurrentPrompt()">
+        🔊 Listen Again
+      </button>
+      <button class="bauhaus-btn btn-sm primary-saffron" id="btnDirectDashboard" onclick="viewDashboardDirectly()">
+        📊 View Recommendations →
+      </button>
+    </div>
+  </div>
+
+  <!-- 7-Dimension Geometric Progress Steps Bar -->
+  <div class="dim-tracker" id="dimTracker">
+    <div class="dim-step active" id="dimStep1">
+      <span class="dim-number">01</span>
+      <span class="dim-title">Education</span>
+    </div>
+    <div class="dim-step pending" id="dimStep2">
+      <span class="dim-number">02</span>
+      <span class="dim-title">Heritage Craft</span>
+    </div>
+    <div class="dim-step pending" id="dimStep3">
+      <span class="dim-number">03</span>
+      <span class="dim-title">Livelihood</span>
+    </div>
+    <div class="dim-step pending" id="dimStep4">
+      <span class="dim-number">04</span>
+      <span class="dim-title">Skills & Aptitude</span>
+    </div>
+    <div class="dim-step pending" id="dimStep5">
+      <span class="dim-number">05</span>
+      <span class="dim-title">Mobility</span>
+    </div>
+    <div class="dim-step pending" id="dimStep6">
+      <span class="dim-number">06</span>
+      <span class="dim-title">Self vs Wage</span>
+    </div>
+    <div class="dim-step pending" id="dimStep7">
+      <span class="dim-number">07</span>
+      <span class="dim-title">District Market</span>
+    </div>
+  </div>
+
+  <!-- Main Interview Workspace Grid -->
+  <div class="grid-2col" style="margin-top:1.5rem;align-items:start;">
+
+    <!-- Left Column: Audio Visualizer & Live Chat -->
+    <div>
+      <!-- Live Web Audio Waveform Canvas -->
+      <div class="waveform-container">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <span class="mono-meta" style="color:var(--bright-saffron);">SPEECH SPECTRUM & FREQUENCY ANALYSER</span>
+          <span class="mono-meta" id="micStatusText" style="color:#FFF;">MIC STANDBY</span>
+        </div>
+        <canvas id="waveformCanvas" width="600" height="110"></canvas>
+      </div>
+
+      <!-- Chat Timeline -->
+      <div class="interview-chat-box" id="chatBox">
+        <div class="chat-bubble agent">
+          <div class="bubble-sender">
+            <span style="color:var(--navy-blue);">PM-AJAY VOICE INTERVIEWER</span>
+            <span>01/07</span>
+          </div>
+          <div class="bubble-text" id="initialPromptText">
+            {{ initial_prompt.text }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Voice & Text Controls -->
+      <div class="recorder-control-bar">
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <button class="bauhaus-btn primary-saffron btn-lg" id="btnRecordToggle">
+            <span class="mic-active-pulse" id="micPulse" style="display:none;"></span>
+            <span id="recordBtnLabel">🎙 Hold to Speak</span>
+          </button>
+        </div>
+
+        <div style="flex:1;min-width:200px;display:flex;gap:0.5rem;">
+          <input type="text" id="textResponseInput" placeholder="Or type regional reply here..." style="flex:1;border:var(--border-med);padding:0.75rem;font-weight:600;font-size:0.95rem;outline:none;">
+          <button class="bauhaus-btn stark-black" id="btnSendText">Send ↵</button>
+        </div>
+      </div>
+
+      <!-- Quick Suggested Response Chips for High Accessibility -->
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;" id="quickChipsContainer">
+        <!-- Injected dynamically based on current step -->
+      </div>
+    </div>
+
+    <!-- Right Column: Live 7D Vector Profile Card -->
+    <div class="bauhaus-card">
+      <div class="card-header navy">
+        <div>
+          <span class="mono-meta" style="color:var(--bright-saffron);">REAL-TIME VECTOR EXTRACTION</span>
+          <h3>BENEFICIARY 7D PROFILE</h3>
+        </div>
+        <span class="bauhaus-tag tag-yellow" id="completionStatusTag">IN PROGRESS</span>
+      </div>
+
+      <div class="card-body" style="display:flex;flex-direction:column;gap:1.25rem;">
+        <div>
+          <span class="mono-meta">BENEFICIARY METADATA</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.4rem;">
+            <div style="border:var(--border-thin);padding:0.5rem;background:#FAFAFA;">
+              <span style="font-size:0.75rem;font-weight:800;color:var(--slate-gray);">NAME</span>
+              <div style="font-weight:900;" id="profName">Candidate (Sample)</div>
+            </div>
+            <div style="border:var(--border-thin);padding:0.5rem;background:#FAFAFA;">
+              <span style="font-size:0.75rem;font-weight:800;color:var(--slate-gray);">LOCATION</span>
+              <div style="font-weight:900;" id="profLoc">Varanasi, UP</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 Dimensions Live Vector Readout -->
+        <div style="border-top:var(--border-med);padding-top:1rem;">
+          <span class="mono-meta">CAPTURED VECTOR ATTRIBUTES</span>
+
+          <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.75rem;">
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox1">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>01. EDUCATION QUALIFICATION</span>
+                <span class="bauhaus-tag" id="valEdu">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox2">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>02. TRADITIONAL FAMILY OCCUPATION</span>
+                <span class="bauhaus-tag" id="valFam">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox3">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>03. CURRENT LIVELIHOOD BASE</span>
+                <span class="bauhaus-tag" id="valLiv">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox4">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>04. SKILLS & PASSION</span>
+                <span class="bauhaus-tag" id="valSkill">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox5">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>05. GEOGRAPHIC MOBILITY</span>
+                <span class="bauhaus-tag" id="valMob">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox6">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>06. SELF VS WAGE ORIENTATION</span>
+                <span class="bauhaus-tag" id="valEmp">Pending</span>
+              </div>
+            </div>
+
+            <div style="border:var(--border-thin);padding:0.6rem;background:#FFF;" id="vecBox7">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:900;">
+                <span>07. LOCAL DISTRICT ECONOMY</span>
+                <span class="bauhaus-tag" id="valEcon">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="finishActionBox" style="display:none;border-top:var(--border-thick);padding-top:1rem;">
+          <a href="#" id="finalDashboardLink" class="bauhaus-btn primary-saffron btn-lg" style="width:100%;">
+            ⚡ Generate NSQF Recommendations Report →
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/recorder.js' %}"></script>
+<script>
+  const SURVEY_DATA = JSON.parse('{{ survey_prompts_json|escapejs }}');
+  let currentLanguage = '{{ selected_lang|default:"hi" }}';
+  let currentStepNumber = 1;
+  let lastAgentPrompt = `{{ initial_prompt.text|escapejs }}`;
+  let client = null;
+
+  const QUICK_REPLIES = {
+    1: ['10th Pass (High School)', '8th Pass', '12th Pass (Inter)', 'ITI / Vocational', '5th Pass / Primary', 'Graduate'],
+    2: ['Handloom Weaving & Textiles', 'Carpentry & Woodwork', 'Agriculture & Farming', 'Blacksmith & Metalwork', 'Pottery & Clay Art', 'Masonry & Construction'],
+    3: ['Daily Wage Laborer', 'Small Shop Vendor', 'Seasonal Farm Worker', 'Unemployed Job Seeker', 'Helper / Apprentice'],
+    4: ['Solar PV Installation & Wiring', 'Garment Tailoring & Design', 'Automobile / 2-Wheeler Repair', 'Digital Data Entry / Computer', 'Food Processing & Bakery'],
+    5: ['Within Village / Home-based', 'Within District Headquarters', 'Open to State-level Relocation'],
+    6: ['Self-Employed / Micro-Enterprise', 'Monthly Wage Salary Job', 'SHG Women Collective'],
+    7: ['Handloom & Tourism Market', 'Rural Agri-tech / Farming Hub', 'Industrial Manufacturing Corridor', 'Urban Services & E-commerce']
+  };
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    client = new VoiceAssistantClient({
+      sessionId: '{{ session_id }}',
+      language: currentLanguage,
+      initialStep: 1,
+      onStateChange: handleAssistantStateChange,
+      onNewMessage: appendChatMessage
+    });
+
+    await client.initAudioStream();
+    renderQuickChips(1);
+
+    // Initial utterance
+    setTimeout(() => {
+      client.speakText(lastAgentPrompt, getLangTag(currentLanguage));
+    }, 600);
+
+    // Recording button events (Click & Hold or Toggle)
+    const btnRecord = document.getElementById('btnRecordToggle');
+    btnRecord.addEventListener('mousedown', () => client.startRecording());
+    btnRecord.addEventListener('mouseup', () => client.stopRecording());
+    btnRecord.addEventListener('touchstart', (e) => { e.preventDefault(); client.startRecording(); });
+    btnRecord.addEventListener('touchend', (e) => { e.preventDefault(); client.stopRecording(); });
+
+    // Text send
+    document.getElementById('btnSendText').addEventListener('click', sendTextMessage);
+    document.getElementById('textResponseInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendTextMessage();
+    });
+  });
+
+  function getLangTag(l) {
+    const map = { hi: 'hi-IN', ta: 'ta-IN', te: 'te-IN', mr: 'mr-IN', or: 'or-IN', bn: 'bn-IN', en: 'en-IN' };
+    return map[l] || 'hi-IN';
+  }
+
+  function handleAssistantStateChange(state) {
+    const micStatus = document.getElementById('micStatusText');
+    const micPulse = document.getElementById('micPulse');
+    const recordLabel = document.getElementById('recordBtnLabel');
+
+    if (state.isRecording) {
+      micStatus.textContent = 'RECORDING AUDIO...';
+      micStatus.style.color = 'var(--deep-saffron)';
+      micPulse.style.display = 'inline-block';
+      recordLabel.textContent = 'Release to Send';
+    } else if (state.isProcessing) {
+      micStatus.textContent = 'PROCESSING WITH WHISPER/BHASHINI...';
+      micStatus.style.color = 'var(--ochre-yellow)';
+      micPulse.style.display = 'none';
+      recordLabel.textContent = 'Analyzing...';
+    } else if (state.isSpeaking) {
+      micStatus.textContent = 'ASSISTANT SPEAKING...';
+      micStatus.style.color = '#FFF';
+      micPulse.style.display = 'none';
+      recordLabel.textContent = 'Hold to Speak';
+    } else {
+      micStatus.textContent = 'MIC STANDBY';
+      micStatus.style.color = '#FFF';
+      micPulse.style.display = 'none';
+      recordLabel.textContent = '🎙 Hold to Speak';
+    }
+
+    if (state.currentStep) {
+      updateStepTracker(state.currentStep);
+      renderQuickChips(state.currentStep);
+    }
+
+    if (state.beneficiaryProfile) {
+      updateProfileCard(state.beneficiaryProfile);
+    }
+
+    if (state.isCompleted) {
+      document.getElementById('completionStatusTag').textContent = 'COMPLETED (100%)';
+      document.getElementById('completionStatusTag').className = 'bauhaus-tag tag-green';
+      document.getElementById('finishActionBox').style.display = 'block';
+      document.getElementById('finalDashboardLink').href = `/dashboard/?beneficiary_id=${state.beneficiaryId}`;
+    }
+  }
+
+  function appendChatMessage(msg) {
+    const chatBox = document.getElementById('chatBox');
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${msg.sender}`;
+
+    const senderTitle = msg.sender === 'agent' ? 'PM-AJAY VOICE INTERVIEWER' : 'BENEFICIARY (YOU)';
+    const colorStyle = msg.sender === 'agent' ? 'color:var(--navy-blue);' : 'color:var(--stark-black);';
+
+    bubble.innerHTML = `
+      <div class="bubble-sender">
+        <span style="${colorStyle}">${senderTitle}</span>
+        <span>${msg.time || ''}</span>
+      </div>
+      <div class="bubble-text">${msg.text}</div>
+    `;
+
+    chatBox.appendChild(bubble);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (msg.sender === 'agent') {
+      lastAgentPrompt = msg.text;
+    }
+  }
+
+  function sendTextMessage() {
+    const input = document.getElementById('textResponseInput');
+    const text = input.value.trim();
+    if (!text || !client) return;
+
+    input.value = '';
+    appendChatMessage({
+      sender: 'user',
+      text: text,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+
+    client.sendChatMessage(text);
+  }
+
+  function renderQuickChips(step) {
+    const container = document.getElementById('quickChipsContainer');
+    container.innerHTML = '';
+    const chips = QUICK_REPLIES[step] || [];
+
+    chips.forEach(chip => {
+      const btn = document.createElement('button');
+      btn.className = 'bauhaus-btn btn-sm';
+      btn.textContent = chip;
+      btn.onclick = () => {
+        document.getElementById('textResponseInput').value = chip;
+        sendTextMessage();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function updateStepTracker(step) {
+    currentStepNumber = step;
+    for (let i = 1; i <= 7; i++) {
+      const el = document.getElementById(`dimStep${i}`);
+      if (!el) continue;
+      if (i < step) {
+        el.className = 'dim-step completed';
+      } else if (i === step) {
+        el.className = 'dim-step active';
+      } else {
+        el.className = 'dim-step pending';
+      }
+    }
+  }
+
+  function updateProfileCard(profile) {
+    if (profile.name) document.getElementById('profName').textContent = profile.name;
+    if (profile.district) document.getElementById('profLoc').textContent = `${profile.district}`;
+
+    if (profile.education_level) {
+      document.getElementById('valEdu').textContent = profile.education_level;
+      document.getElementById('valEdu').className = 'bauhaus-tag tag-navy';
+    }
+    if (profile.family_occupation) {
+      document.getElementById('valFam').textContent = profile.family_occupation;
+      document.getElementById('valFam').className = 'bauhaus-tag tag-saffron';
+    }
+    if (profile.current_livelihood) {
+      document.getElementById('valLiv').textContent = profile.current_livelihood;
+      document.getElementById('valLiv').className = 'bauhaus-tag tag-yellow';
+    }
+    if (profile.primary_skills && profile.primary_skills.length) {
+      document.getElementById('valSkill').textContent = Array.isArray(profile.primary_skills) ? profile.primary_skills.join(', ') : profile.primary_skills;
+      document.getElementById('valSkill').className = 'bauhaus-tag tag-green';
+    }
+    if (profile.mobility_constraint) {
+      document.getElementById('valMob').textContent = profile.mobility_constraint;
+      document.getElementById('valMob').className = 'bauhaus-tag tag-navy';
+    }
+    if (profile.employment_preference) {
+      document.getElementById('valEmp').textContent = profile.employment_preference;
+      document.getElementById('valEmp').className = 'bauhaus-tag tag-saffron';
+    }
+    if (profile.district_economy) {
+      document.getElementById('valEcon').textContent = profile.district_economy;
+      document.getElementById('valEcon').className = 'bauhaus-tag tag-yellow';
+    }
+  }
+
+  function replayCurrentPrompt() {
+    if (client && lastAgentPrompt) {
+      client.speakText(lastAgentPrompt, getLangTag(currentLanguage));
+    }
+  }
+
+  function viewDashboardDirectly() {
+    if (client && client.beneficiaryId) {
+      window.location.href = `/dashboard/?beneficiary_id=${client.beneficiaryId}`;
+    } else {
+      window.location.href = `/dashboard/`;
+    }
+  }
+</script>
+{% endblock %}
